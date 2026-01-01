@@ -75,4 +75,3 @@ This implementation demonstrates:
 * Not resistant to side-channel attacks
 * Not parameter-safe
 * Not suitable for real cryptographic use
-# elliptic-curve-go
