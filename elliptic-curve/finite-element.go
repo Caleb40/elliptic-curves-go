@@ -45,12 +45,15 @@ func (f *FieldElement) Add(other *FieldElement) *FieldElement {
 
 func (f *FieldElement) Negate() *FieldElement {
 	// (a + b) % order === order - a
-	return NewFieldElement(f.order, (f.order-f.num)%f.order)
+	//return NewFieldElement(f.order, (f.order-f.num)%f.order)
+	return NewFieldElement(f.order, (-f.num)%f.order)
 }
 
 func (f *FieldElement) Subtract(other *FieldElement) *FieldElement {
 	if f.order != other.order {
 		panic("Subtract operation can only be performed on elements with the same order.")
 	}
+	fmt.Println("Other:", other)
+	fmt.Println("Negated:", other.Negate())
 	return f.Add(other.Negate())
 }
