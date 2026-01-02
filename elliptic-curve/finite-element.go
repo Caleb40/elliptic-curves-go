@@ -74,3 +74,7 @@ func (f *FieldElement) Power(power int64) *FieldElement {
 	return NewFieldElement(f.order,
 		uint64(math.Pow(float64(f.num), float64(power)))%f.order)
 }
+
+func (f *FieldElement) ScalarMul(val uint64) *FieldElement {
+	return NewFieldElement(f.order, (f.num*val)%f.order)
+}

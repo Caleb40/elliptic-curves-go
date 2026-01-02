@@ -3,7 +3,22 @@ package main
 import (
 	ecc "elliptic_curve"
 	"fmt"
+	"math/rand"
 )
+
+func SolveField19MultiplySet() {
+	// randomly select a num from 1 - 18
+	minimum := 1
+	maximum := 18
+	k := rand.Intn(maximum-minimum) + minimum
+	fmt.Printf("Randomly selected value, k is %d\n", k)
+	element := ecc.NewFieldElement(19, uint64(k))
+
+	for i := 0; i < 19; i++ {
+		fmt.Printf("Element: %d, multiplied with %d is: %v", k, i,
+			element.ScalarMul(uint64(i)))
+	}
+}
 
 func main() {
 	f44 := ecc.NewFieldElement(57, 44)
@@ -22,5 +37,7 @@ func main() {
 	fmt.Printf("Product of Element 46 with itself is: %v", f46.Multiply(f46))
 	fmt.Printf("Exponent of Element 46 with 2 is: %v", f46.Power(2))
 	// Check:
-	fmt.Printf("CHECK: 46^2 and 46 * 46 are equivalent: %v\n", f46.Multiply(f46).EqualTo(f46.Power(2)))
+	fmt.Printf("CHECK: 46^2 and 46 * 46 are equivalent: %v\n\n", f46.Multiply(f46).EqualTo(f46.Power(2)))
+
+	SolveField19MultiplySet()
 }
