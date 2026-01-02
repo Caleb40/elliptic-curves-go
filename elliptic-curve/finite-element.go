@@ -2,6 +2,7 @@ package elliptic_curve
 
 import (
 	"fmt"
+	"math"
 )
 
 type FieldElement struct {
@@ -52,11 +53,24 @@ func (f *FieldElement) Add(other *FieldElement) *FieldElement {
 
 func (f *FieldElement) Negate() *FieldElement {
 	// (a + b) % order === order - a
-	//return NewFieldElement(f.order, (f.order-f.num)%f.order)
-	return NewFieldElement(f.order, (-f.num)%f.order)
+	//return NewFieldElement(f.order, (-f.num)%f.order) equivalent
+	return NewFieldElement(f.order, (f.order-f.num)%f.order)
 }
 
 func (f *FieldElement) Subtract(other *FieldElement) *FieldElement {
+	// Simply the sum of the element and the negation of the other
 	f.checkOrder(other)
 	return f.Add(other.Negate())
+}
+
+func (f *FieldElement) Multiply(other *FieldElement) *FieldElement {
+	// Arithmetic multiplication over the modulo of the order
+	f.checkOrder(other)
+	return NewFieldElement(f.order, (f.num*other.num)%f.order)
+}
+
+func (f *FieldElement) Power(power int64) *FieldElement {
+	// Arithmetic power over the modulo of the order
+	return NewFieldElement(f.order,
+		uint64(math.Pow(float64(f.num), float64(power)))%f.order)
 }
