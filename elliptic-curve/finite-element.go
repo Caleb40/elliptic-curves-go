@@ -37,7 +37,7 @@ func (f *FieldElement) checkOrder(other *FieldElement) {
 
 func (f *FieldElement) String() string {
 	// equivalent of "__repr__" in python
-	return fmt.Sprintf("FieldElement{order:%d, num:%d}\n", f.order, f.num)
+	return fmt.Sprintf("FieldElement {order:%d, num:%d}\n", f.order, f.num)
 }
 
 func (f *FieldElement) EqualTo(other *FieldElement) bool {
