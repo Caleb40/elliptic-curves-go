@@ -25,6 +25,15 @@ func NewFieldElement(order uint64, num uint64) *FieldElement {
 	}
 }
 
+func (f *FieldElement) checkOrder(other *FieldElement) {
+	if f.order != other.order {
+		panic(fmt.Sprintf(
+			"order mismatch: source element has order %d, target element has order %d",
+			f.order, other.order,
+		))
+	}
+}
+
 func (f *FieldElement) String() string {
 	// equivalent of "__repr__" in python
 	return fmt.Sprintf("FieldElement{order:%d, num:%d}\n", f.order, f.num)
@@ -35,9 +44,7 @@ func (f *FieldElement) EqualTo(other *FieldElement) bool {
 }
 
 func (f *FieldElement) Add(other *FieldElement) *FieldElement {
-	if f.order != other.order {
-		panic("Add operation can only be performed on elements with the same order.")
-	}
+	f.checkOrder(other)
 	// remember the modulo
 	// operator overloading for +, __add__ python
 	return NewFieldElement(f.order, (f.num+other.num)%f.order)
@@ -50,8 +57,6 @@ func (f *FieldElement) Negate() *FieldElement {
 }
 
 func (f *FieldElement) Subtract(other *FieldElement) *FieldElement {
-	if f.order != other.order {
-		panic("Subtract operation can only be performed on elements with the same order.")
-	}
+	f.checkOrder(other)
 	return f.Add(other.Negate())
 }
