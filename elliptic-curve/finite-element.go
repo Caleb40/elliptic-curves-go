@@ -53,7 +53,5 @@ func (f *FieldElement) Subtract(other *FieldElement) *FieldElement {
 	if f.order != other.order {
 		panic("Subtract operation can only be performed on elements with the same order.")
 	}
-	fmt.Println("Other:", other)
-	fmt.Println("Negated:", other.Negate())
 	return f.Add(other.Negate())
 }
