@@ -2,22 +2,22 @@ package elliptic_curve
 
 import (
 	"fmt"
-	"math"
+	"math/big"
 )
 
 type FieldElement struct {
 	// class FieldElement (equivalent in python)
-	order uint64 // field order
-	num   uint64 // value of the given element in the field
+	order *big.Int // field order
+	num   *big.Int // value of the given element in the field
 }
 
-func NewFieldElement(order uint64, num uint64) *FieldElement {
+func NewFieldElement(order *big.Int, num *big.Int) *FieldElement {
 	/*
 		init function for FieldElement, __init__ from python
 		(initialization)
 	*/
-	if num >= order {
-		err := fmt.Sprintf("Num not in the range of 0 to %d", order-1)
+	if order.Cmp(num) == -1 {
+		err := fmt.Sprintf("Num not in the range of 0 to %s", order.Sub(order, big.NewInt(1)))
 		panic(err)
 	}
 	return &FieldElement{
@@ -27,7 +27,7 @@ func NewFieldElement(order uint64, num uint64) *FieldElement {
 }
 
 func (f *FieldElement) checkOrder(other *FieldElement) {
-	if f.order != other.order {
+	if f.order.Cmp(other.order) != 0 {
 		panic(fmt.Sprintf(
 			"order mismatch: source element has order %d, target element has order %d",
 			f.order, other.order,
@@ -37,24 +37,26 @@ func (f *FieldElement) checkOrder(other *FieldElement) {
 
 func (f *FieldElement) String() string {
 	// equivalent of "__repr__" in python
-	return fmt.Sprintf("FieldElement {order:%d, num:%d}\n", f.order, f.num)
+	return fmt.Sprintf("FieldElement {order:%s, num:%s}\n", f.order.String(), f.num.String())
 }
 
 func (f *FieldElement) EqualTo(other *FieldElement) bool {
-	return f.order == other.order && f.num == other.num
+	return f.order.Cmp(other.order) == 0 && f.num.Cmp(other.num) == 0
 }
 
 func (f *FieldElement) Add(other *FieldElement) *FieldElement {
 	f.checkOrder(other)
 	// remember the modulo
 	// operator overloading for +, __add__ python
-	return NewFieldElement(f.order, (f.num+other.num)%f.order)
+	var op big.Int
+	return NewFieldElement(f.order, op.Mod(op.Add(f.num, other.num), f.order))
 }
 
 func (f *FieldElement) Negate() *FieldElement {
 	// (a + b) % order === order - a
 	//return NewFieldElement(f.order, (-f.num)%f.order) equivalent
-	return NewFieldElement(f.order, (f.order-f.num)%f.order)
+	var op = big.Int{}
+	return NewFieldElement(f.order, op.Sub(f.order, f.num))
 }
 
 func (f *FieldElement) Subtract(other *FieldElement) *FieldElement {
@@ -66,15 +68,20 @@ func (f *FieldElement) Subtract(other *FieldElement) *FieldElement {
 func (f *FieldElement) Multiply(other *FieldElement) *FieldElement {
 	// Arithmetic multiplication over the modulo of the order
 	f.checkOrder(other)
-	return NewFieldElement(f.order, (f.num*other.num)%f.order)
+	var op big.Int
+	mul := op.Mul(f.num, other.num)
+	return NewFieldElement(f.order, op.Mod(mul, f.order))
 }
 
-func (f *FieldElement) Power(power int64) *FieldElement {
+func (f *FieldElement) Power(power *big.Int) *FieldElement {
 	// Arithmetic power over the modulo of the order
-	return NewFieldElement(f.order,
-		uint64(math.Pow(float64(f.num), float64(power)))%f.order)
+	var op big.Int
+	powerRes := op.Exp(f.num, power, nil)
+	return NewFieldElement(f.order, op.Mod(powerRes, f.order))
 }
 
-func (f *FieldElement) ScalarMul(val uint64) *FieldElement {
-	return NewFieldElement(f.order, (f.num*val)%f.order)
+func (f *FieldElement) ScalarMul(val *big.Int) *FieldElement {
+	var op big.Int
+	mul := op.Mul(f.num, val)
+	return NewFieldElement(f.order, op.Mod(mul, f.order))
 }
