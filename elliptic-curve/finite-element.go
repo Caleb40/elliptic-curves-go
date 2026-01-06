@@ -85,3 +85,11 @@ func (f *FieldElement) ScalarMul(val *big.Int) *FieldElement {
 	mul := op.Mul(f.num, val)
 	return NewFieldElement(f.order, op.Mod(mul, f.order))
 }
+
+func (f *FieldElement) Divide(other *FieldElement) *FieldElement {
+	f.checkOrder(other)
+	// a / b => a * b^(p-2)
+	var op = big.Int{}
+	otherReverse := other.Power(op.Sub(f.order, big.NewInt(2)))
+	return f.Multiply(otherReverse)
+}
