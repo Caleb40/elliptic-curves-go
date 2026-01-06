@@ -22,10 +22,10 @@ func SolveField19MultiplySet() {
 }
 
 /*
-If p is a field of Order, p = 7, 11, 17, 19, 31...
+If p is a field of order, p = 7, 11, 17, 19, 31...
 Select any element, k in the field with order p, compute k ^ (p-1). What is the result for this?
 => { 1^(p-1), 2^(p-1), ..., (p-1)^(p-1) % p }
-∴ for any element, k in the field with order => k ^ (p-1) % p == 1
+∴ for any element, k in the field with order p => k ^ (p-1) % p == 1
 */
 
 func ComputeFieldOrderPower() {
