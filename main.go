@@ -21,6 +21,24 @@ func SolveField19MultiplySet() {
 	}
 }
 
+/*
+If p is a field of Order, p = 7, 11, 17, 19, 31...
+Select any element, k in the field with order p, compute k ^ (p-1). What is the result for this?
+=> { 1^(p-1), 2^(p-1), ..., (p-1)^(p-1) % p }
+∴ for any element, k in the field with order => k ^ (p-1) % p == 1
+*/
+
+func ComputeFieldOrderPower() {
+	orders := []int{7, 11, 17, 19, 31}
+	for _, p := range orders {
+		fmt.Printf("The value of p is %d\n", p)
+		for i := 1; i < p; i++ {
+			elem := ecc.NewFieldElement(big.NewInt(int64(p)), big.NewInt(int64(i)))
+			fmt.Printf("For element: %v, it's value to the power of p-1 is %v\n", elem, elem.Power(big.NewInt(int64(p-1))))
+		}
+	}
+}
+
 func main() {
 	f44 := ecc.NewFieldElement(big.NewInt(57), big.NewInt(44))
 	f33 := ecc.NewFieldElement(big.NewInt(57), big.NewInt(33))
@@ -41,4 +59,6 @@ func main() {
 	fmt.Printf("CHECK: 46^2 and 46 * 46 are equivalent: %v\n\n", f46.Multiply(f46).EqualTo(f46.Power(big.NewInt(2))))
 
 	SolveField19MultiplySet()
+
+	ComputeFieldOrderPower()
 }
