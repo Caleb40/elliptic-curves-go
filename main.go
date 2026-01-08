@@ -66,4 +66,9 @@ func main() {
 	f2 := ecc.NewFieldElement(big.NewInt(int64(19)), big.NewInt(int64(2)))
 	f7 := ecc.NewFieldElement(big.NewInt(int64(19)), big.NewInt(int64(7)))
 	fmt.Printf("Field element 2/7 with order 19 is %v\n", f2.Divide(f7))
+
+	f46 = ecc.NewFieldElement(big.NewInt(int64(57)), big.NewInt(int64(46)))
+
+	fmt.Printf("Field element 46 * 46 with order 57 is %v&n", f46.Multiply(f46))
+	fmt.Printf("Field element 46 to the power of 58 is %v\n", f46.Power(big.NewInt(int64(58))))
 }

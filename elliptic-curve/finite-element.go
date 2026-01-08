@@ -75,8 +75,11 @@ func (f *FieldElement) Multiply(other *FieldElement) *FieldElement {
 
 func (f *FieldElement) Power(power *big.Int) *FieldElement {
 	// Arithmetic power over the modulo of the order
+	// k ^ (p-1) % p = 1, power > p-1 => power %p(p-1)
+
 	var op big.Int
-	powerRes := op.Exp(f.num, power, nil)
+	t := op.Mod(power, op.Sub(f.order, big.NewInt(int64(1))))
+	powerRes := op.Exp(f.num, t, nil)
 	return NewFieldElement(f.order, op.Mod(powerRes, f.order))
 }
 
