@@ -71,4 +71,8 @@ func main() {
 
 	fmt.Printf("Field element 46 * 46 with order 57 is %v&n", f46.Multiply(f46))
 	fmt.Printf("Field element 46 to the power of 58 is %v\n", f46.Power(big.NewInt(int64(58))))
+
+	a := ecc.NewFieldElement(big.NewInt(13), big.NewInt(7))
+	b := ecc.NewFieldElement(big.NewInt(13), big.NewInt(8))
+	fmt.Printf("Field element 7^-3 with order 13 == field element 8: %v\n", a.Power(big.NewInt(-3)).EqualTo(b))
 }
