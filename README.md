@@ -21,8 +21,9 @@ This repository exists to expose that structure.
 A finite field 𝔽ₚ is the set:
 
 $$
-\mathbb{F}_p = {0, 1, 2, \dots, p - 1}
+ \mathbb{F}_p = { 0, 1, 2, \dots, p - 1 } 
 $$
+
 
 where *p* is a prime number, and all arithmetic is performed modulo *p*.
 
